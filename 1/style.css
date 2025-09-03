@@ -10,7 +10,7 @@ body {
 .img-row {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     gap: 10px;
 }
@@ -24,8 +24,16 @@ img {
     margin-bottom: 10px;
 }
 
+.img-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   
+    align-items: center;
+}
+
 .img-text p {
     text-align: center;
+    width: 90%;
 }
 
 h2 {
@@ -35,10 +43,20 @@ h2 {
 #cropme {
     overflow: hidden;
     position: relative;
-    top: 21px;
+    top: -40px;
 }
 
 #cropme img {
     position: relative;
-    top: -42px;
+    top: 40px;
+}
+
+#cropme2 {
+    position: relative;
+    top: -40px;
+}
+
+#dollies .img-text img {
+    width: 480px;
+    height: auto;
 }
