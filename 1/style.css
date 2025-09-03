@@ -1,0 +1,42 @@
+body {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.img-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.architectural {
+    margin-bottom: 10px;
+}
+
+.img-text p {
+    text-align: center;
+}
+
+h2 {
+    margin-top: 40px;
+}
+
+#cropme {
+    overflow: hidden;
+    position: relative;
+    top: 21px;
+}
+
+#cropme img {
+    position: relative;
+    top: -42px;
+}
