@@ -1,3 +1,5 @@
+@import "{{ site.theme }}";
+
 body {
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
@@ -60,3 +62,11 @@ h2 {
     width: 480px;
     height: auto;
 }
+
+.wrap{
+  max-width:1100px; margin:0 auto; padding:24px 16px;
+  display:grid; grid-template-columns: 1fr 320px; gap:40px;
+}
+aside.sidebar{ position:sticky; top:20px; height:max-content; }
+@media (max-width:900px){ .wrap{ grid-template-columns:1fr; } aside.sidebar{ position:static; } }
+.widget{ border:1px solid #e7e7e7; border-radius:10px; padding:16px; margin-bottom:16px; background:#fff; }
