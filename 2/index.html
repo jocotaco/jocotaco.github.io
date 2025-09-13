@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 1: Images of the Russian Empire</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap">
+</head>
+<body>
+    <h1>Project 1: Images of the Russian Empire -- Colorizing the Prokudin-Gorskii Photo Collection </h1>
+    <h2>Overview</h2>
+    <p>Below are three selfies that I took on an iPhone 13 Pro. As you can see, there is a decrease in the distortion of my selfies as the phone is 
+        pulled further away from me. Indeed, my last and third portrait looks much better than my first one. I believe this phenomenon exists because when the camera lens
+        is close to my face, nearby objects take up more of the visual field, making my nose appear disproportionately big and my forehead and cheeks stretched. On the flip side, when I step back and zoom in,
+        the distance now evens out the proportions and the zoom changes the field of view.
+    </p>
+    
+
+    <h2>Experimental Results</h2>
+    <h3>Part 1: Single-scale Alignment (with Euclidean Distance / L2)</h3>
+    <p>Below are two sets of images taken of "urban scenes," but one set is of the School of Optometry's hallways and the other set is of foresty roads. 
+        I took the photos on a Samsung Galaxy S21+: once at 3x zoom and once at 1x zoom but closer down the halls and roads. What I noticed about the hallways is that when taken without zoom,
+        the lockers look elongated and stretched out while when taken with zoom, the lockers are squished together. I even made sure to take the photos in reference to the same walls. For the forest roads,
+        what immediately stuck out to me was the telephone lines: it's clear that the non-zoomed photo has steeper telephone lines compared to the zoomed photo. I postulate this is the same principle
+        of perspective, in which by starting far back and zooming in, the field of view is narrow. However, when I walk forward and don't use zoom, the field of view is wide and causes the exaggerated stretch.
+            </p>  
+
+    <div class="architectural img-row">
+        <div class="img-text">
+            <img src="architect_1.jpg" />
+            <p>No zoom</p>
+        </div>
+        <div class="img-text">
+            <img src="architect_2.jpg" />
+            <p>Zoom (notice the squished lockers)</p>
+        </div>
+    </div>
+
+    <div class="architectural img-row">
+        <div class="img-text">
+            <div id="cropme">
+                <img src="architect_3.jpg" />
+            </div>
+            <p id="cropme2">No zoom (notice the elongated telephone lines)</p>
+        </div>
+        <div class="img-text">
+            <img src="architect_4.jpg" />
+            <p>Zoom</p>
+        </div>
+    </div>
+
+    <h3>Part 2: Multi-scale Pyramid Alignment (with NCC)</h3>
+    <p>Below is the Dolly Zoom gif of a Mazda Miata car. I started with a 0.5x zoomed out close-up shot of the car. Then, I walked backwards while simultaneously zooming in on my Samsung S21+ phone. I tried
+        to keep the Miata a consistent size in the scene. We can see a slight dolly effect when the gif is played at a fast speed with the trees and sky in the background becoming stretched and warped. After watching
+        my gif a few times, I almost felt like I had vertigo!
+        </p>  
+    <div id="dollies" class="img-row">
+        <div class="img-text">
+            <img src="dolly_1.gif" />
+            <p>Slowed down gif for a frame-by-frame compilation of still images of the Miata</p>
+        </div>
+        <div class="img-text">
+            <img src="dolly_2.gif" />
+            <p>The sped up gif starts to demonstrate effects of the dolly zoom with the Miata in focus. Very cool!</p>
+         </div>
+    </div>
+
+    <h2>Image Gallery (Generated using Image Pyramids)</h2>
+    <p>Below is the Dolly Zoom gif of a Mazda Miata car. I started with a 0.5x zoomed out close-up shot of the car. Then, I walked backwards while simultaneously zooming in on my Samsung S21+ phone. I tried
+        to keep the Miata a consistent size in the scene. We can see a slight dolly effect when the gif is played at a fast speed with the trees and sky in the background becoming stretched and warped. After watching
+        my gif a few times, I almost felt like I had vertigo!
+        </p>  
+    <div id="dollies" class="img-row">
+        <div class="img-text">
+            <img src="dolly_1.gif" />
+            <p>Slowed down gif for a frame-by-frame compilation of still images of the Miata</p>
+        </div>
+        <div class="img-text">
+            <img src="dolly_2.gif" />
+            <p>The sped up gif starts to demonstrate effects of the dolly zoom with the Miata in focus. Very cool!</p>
+         </div>
+    </div>
+
+    <h3>Challenge</h3>
+    <p>Below is the Dolly Zoom gif of a Mazda Miata car. I started with a 0.5x zoomed out close-up shot of the car. Then, I walked backwards while simultaneously zooming in on my Samsung S21+ phone. I tried
+        to keep the Miata a consistent size in the scene. We can see a slight dolly effect when the gif is played at a fast speed with the trees and sky in the background becoming stretched and warped. After watching
+        my gif a few times, I almost felt like I had vertigo!
+        </p>  
+    <div id="dollies" class="img-row">
+        <div class="img-text">
+            <img src="dolly_1.gif" />
+            <p>Slowed down gif for a frame-by-frame compilation of still images of the Miata</p>
+        </div>
+        <div class="img-text">
+            <img src="dolly_2.gif" />
+            <p>The sped up gif starts to demonstrate effects of the dolly zoom with the Miata in focus. Very cool!</p>
+         </div>
+    </div>
+
+    <h3>Prokudin-Gorskii Collection Self Selected Images</h3>
+    <p>Below is the Dolly Zoom gif of a Mazda Miata car. I started with a 0.5x zoomed out close-up shot of the car. Then, I walked backwards while simultaneously zooming in on my Samsung S21+ phone. I tried
+        to keep the Miata a consistent size in the scene. We can see a slight dolly effect when the gif is played at a fast speed with the trees and sky in the background becoming stretched and warped. After watching
+        my gif a few times, I almost felt like I had vertigo!
+        </p>  
+    <div id="dollies" class="img-row">
+        <div class="img-text">
+            <img src="dolly_1.gif" />
+            <p>Slowed down gif for a frame-by-frame compilation of still images of the Miata</p>
+        </div>
+        <div class="img-text">
+            <img src="dolly_2.gif" />
+            <p>The sped up gif starts to demonstrate effects of the dolly zoom with the Miata in focus. Very cool!</p>
+         </div>
+    </div>
+
+    <h2>Bells & Whistles: Implementation Details</h2>
+    <h3>Automatic Cropping</h3>
+    <h3>Automatic Contrast</h3>
+    <h3>Automatic White Balance</h3>
+    <h3>Better Color Mapping</h3>
+    <h3>Better Features</h3>
+
+    <!-- Link back to main portfolio -->
+    <p><a href="../index.html">← Back to Portfolio</a></p>
+</body>
+</html>
