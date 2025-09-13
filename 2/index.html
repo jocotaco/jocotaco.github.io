@@ -1,127 +1,215 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Project 1: Images of the Russian Empire</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap">
+  <meta charset="utf-8" />
+  <title>Project 1: Images of the Russian Empire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300..900;1,300..900&display=swap">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Project 1: Images of the Russian Empire -- Colorizing the Prokudin-Gorskii Photo Collection </h1>
+  <main class="container">
+    <h1>Project 1: Images of the Russian Empire — Colorizing the Prokudin-Gorskii Photo Collection</h1>
+
     <h2>Overview</h2>
-    <p>Below are three selfies that I took on an iPhone 13 Pro. As you can see, there is a decrease in the distortion of my selfies as the phone is 
-        pulled further away from me. Indeed, my last and third portrait looks much better than my first one. I believe this phenomenon exists because when the camera lens
-        is close to my face, nearby objects take up more of the visual field, making my nose appear disproportionately big and my forehead and cheeks stretched. On the flip side, when I step back and zoom in,
-        the distance now evens out the proportions and the zoom changes the field of view.
+    <p>
+      In this project, I took digitized Prokudin-Gorskii glass plate images and, using image processing techniques,
+      automatically produced a color image with as few visual artifacts as possible. I extracted the three color channel
+      images, placed them on top of each other, and aligned them so that they formed a single RGB color image.
     </p>
-    
 
     <h2>Experimental Results</h2>
-    <h3>Part 1: Single-scale Alignment (with Euclidean Distance / L2)</h3>
-    <p>Below are two sets of images taken of "urban scenes," but one set is of the School of Optometry's hallways and the other set is of foresty roads. 
-        I took the photos on a Samsung Galaxy S21+: once at 3x zoom and once at 1x zoom but closer down the halls and roads. What I noticed about the hallways is that when taken without zoom,
-        the lockers look elongated and stretched out while when taken with zoom, the lockers are squished together. I even made sure to take the photos in reference to the same walls. For the forest roads,
-        what immediately stuck out to me was the telephone lines: it's clear that the non-zoomed photo has steeper telephone lines compared to the zoomed photo. I postulate this is the same principle
-        of perspective, in which by starting far back and zooming in, the field of view is narrow. However, when I walk forward and don't use zoom, the field of view is wide and causes the exaggerated stretch.
-            </p>  
 
-    <div class="architectural img-row">
-        <div class="img-text">
-            <img src="architect_1.jpg" />
-            <p>No zoom</p>
-        </div>
-        <div class="img-text">
-            <img src="architect_2.jpg" />
-            <p>Zoom (notice the squished lockers)</p>
-        </div>
+    <h3>Part 1: Single-scale Alignment (L2 / NCC)</h3>
+    <p>
+      I used the blue channel as reference and aligned the red and green channels to it. TIFFs come with channels stacked
+      vertically (BGR), so I split them with array slicing. I evaluated alignment with either L2 (sum of squared
+      differences) or normalized cross-correlation (NCC), then brute-forced shifts in a window of (−15, 15) in x and y.
+    </p>
+
+    <h4>Challenge</h4>
+    <p>
+      <code>np.roll</code> wraps cyclically, so shifting up brings the top strip to the bottom. I avoided wrap artifacts by
+      computing scores only on the overlapping region (intersection crop) and pre-cropping borders before the search.
+    </p>
+
+    <div class="img-row">
+      <figure class="img-text">
+        <img src="melons_misaligned.png" alt="Misaligned melons example">
+        <figcaption>Here, <code>np.roll</code> caused visible wrap artifacts.</figcaption>
+      </figure>
+      <figure class="img-text">
+        <img src="melons_pyramid.png" alt="Aligned melons example">
+        <figcaption>After fixes, misalignment and wrap artifacts are gone.</figcaption>
+      </figure>
     </div>
 
-    <div class="architectural img-row">
-        <div class="img-text">
-            <div id="cropme">
-                <img src="architect_3.jpg" />
-            </div>
-            <p id="cropme2">No zoom (notice the elongated telephone lines)</p>
-        </div>
-        <div class="img-text">
-            <img src="architect_4.jpg" />
-            <p>Zoom</p>
-        </div>
+    <h3>Part 2: Multi-scale Pyramid Alignment (NCC)</h3>
+    <p>
+      Large TIFFs are slow with exhaustive search, so I used a coarse-to-fine pyramid. I downsampled by 2 until the smallest
+      image’s long side &lt; 300px, aligned at the coarsest level, then propagated and refined shifts at each finer level.
+    </p>
+
+    <h2>Image Gallery (Pyramid + NCC)</h2>
+    <p>Below is a gallery of 14 colorized images.</p>
+
+    <div class="gallery">
+      <figure class="img-text"><img src="cathedral_pyramid.png" alt=""><figcaption>Cathedral</figcaption></figure>
+      <figure class="img-text"><img src="church_pyramid.png" alt=""><figcaption>Church</figcaption></figure>
+      <figure class="img-text"><img src="emir_pyramid.png" alt=""><figcaption>Emir</figcaption></figure>
+
+      <figure class="img-text"><img src="harvesters_pyramid.png" alt=""><figcaption>Harvesters</figcaption></figure>
+      <figure class="img-text"><img src="icon_pyramid.png" alt=""><figcaption>Icon</figcaption></figure>
+      <figure class="img-text"><img src="italil_pyramid.png" alt=""><figcaption>Italil</figcaption></figure>
+
+      <figure class="img-text"><img src="lastochikino_pyramid.png" alt=""><figcaption>Lastochikino</figcaption></figure>
+      <figure class="img-text"><img src="lugano_pyramid.png" alt=""><figcaption>Lugano</figcaption></figure>
+      <figure class="img-text"><img src="melons_pyramid.png" alt=""><figcaption>Melons</figcaption></figure>
+
+      <figure class="img-text"><img src="monastery_pyramid.png" alt=""><figcaption>Monastery</figcaption></figure>
+      <figure class="img-text"><img src="self_portrait_pyramid.png" alt=""><figcaption>Self Portrait</figcaption></figure>
+      <figure class="img-text"><img src="three_gen_pyramid.png" alt=""><figcaption>Three Generations</figcaption></figure>
+
+      <figure class="img-text"><img src="siren_pyramid.png" alt=""><figcaption>Siren</figcaption></figure>
+      <figure class="img-text"><img src="tobolsk_pyramid.png" alt=""><figcaption>Tobolsk</figcaption></figure>
     </div>
 
-    <h3>Part 2: Multi-scale Pyramid Alignment (with NCC)</h3>
-    <p>Below is the Dolly Zoom gif of a Mazda Miata car. I started with a 0.5x zoomed out close-up shot of the car. Then, I walked backwards while simultaneously zooming in on my Samsung S21+ phone. I tried
-        to keep the Miata a consistent size in the scene. We can see a slight dolly effect when the gif is played at a fast speed with the trees and sky in the background becoming stretched and warped. After watching
-        my gif a few times, I almost felt like I had vertigo!
-        </p>  
-    <div id="dollies" class="img-row">
-        <div class="img-text">
-            <img src="dolly_1.gif" />
-            <p>Slowed down gif for a frame-by-frame compilation of still images of the Miata</p>
-        </div>
-        <div class="img-text">
-            <img src="dolly_2.gif" />
-            <p>The sped up gif starts to demonstrate effects of the dolly zoom with the Miata in focus. Very cool!</p>
-         </div>
+    <h2>Alignment Displacements (relative to Blue)</h2>
+    <table class="disp-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Green (x, y)</th>
+          <th>Red (x, y)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Cathedral</td><td>(2, 5)</td><td>(3, 12)</td></tr>
+        <tr><td>Church</td><td>(4, 25)</td><td>(−4, 58)</td></tr>
+        <tr><td>Emir</td><td>(24, 49)</td><td>(40, 107)</td></tr>
+        <tr><td>Harvesters</td><td>(18, 60)</td><td>(14, 123)</td></tr>
+        <tr><td>Icon</td><td>(17, 41)</td><td>(23, 90)</td></tr>
+        <tr><td>Italil</td><td>(22, 38)</td><td>(36, 77)</td></tr>
+        <tr><td>Lastochikino</td><td>(−1, −3)</td><td>(−8, 76)</td></tr>
+        <tr><td>Lugano</td><td>(−17, 41)</td><td>(−29, 93)</td></tr>
+        <tr><td>Melons</td><td>(11, 81)</td><td>(14, 177)</td></tr>
+        <tr><td>Monastery</td><td>(2, −3)</td><td>(2, 3)</td></tr>
+        <tr><td>Self Portrait</td><td>(29, 78)</td><td>(37, 175)</td></tr>
+        <tr><td>Three Generations</td><td>(13, 53)</td><td>(10, 112)</td></tr>
+        <tr><td>Siren</td><td>(−5, 49)</td><td>(−24, 96)</td></tr>
+        <tr><td>Tobolsk</td><td>(3, 3)</td><td>(3, 7)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Prokudin-Gorskii Collection — Self-Selected</h3>
+    <div class="img-row">
+      <figure class="img-text">
+        <img src="vygriv.png" alt="Vyg River example">
+        <figcaption>Vyg River: aligned well but I'm not sure this is the original color intention.</figcaption>
+      </figure>
+        <figure class="img-text">
+        <img src="pyramid_l2norm_final_True_no_contrast_no_color_no_wb.png" alt="Vyg River example">
+        <figcaption>Did not work for Murgab estate sadly.</figcaption>
+      </figure>
     </div>
 
-    <h2>Image Gallery (Generated using Image Pyramids)</h2>
-    <p>Below is the Dolly Zoom gif of a Mazda Miata car. I started with a 0.5x zoomed out close-up shot of the car. Then, I walked backwards while simultaneously zooming in on my Samsung S21+ phone. I tried
-        to keep the Miata a consistent size in the scene. We can see a slight dolly effect when the gif is played at a fast speed with the trees and sky in the background becoming stretched and warped. After watching
-        my gif a few times, I almost felt like I had vertigo!
-        </p>  
-    <div id="dollies" class="img-row">
-        <div class="img-text">
-            <img src="dolly_1.gif" />
-            <p>Slowed down gif for a frame-by-frame compilation of still images of the Miata</p>
-        </div>
-        <div class="img-text">
-            <img src="dolly_2.gif" />
-            <p>The sped up gif starts to demonstrate effects of the dolly zoom with the Miata in focus. Very cool!</p>
-         </div>
-    </div>
+    <h2>Bells &amp; Whistles</h2>
 
-    <h3>Challenge</h3>
-    <p>Below is the Dolly Zoom gif of a Mazda Miata car. I started with a 0.5x zoomed out close-up shot of the car. Then, I walked backwards while simultaneously zooming in on my Samsung S21+ phone. I tried
-        to keep the Miata a consistent size in the scene. We can see a slight dolly effect when the gif is played at a fast speed with the trees and sky in the background becoming stretched and warped. After watching
-        my gif a few times, I almost felt like I had vertigo!
-        </p>  
-    <div id="dollies" class="img-row">
-        <div class="img-text">
-            <img src="dolly_1.gif" />
-            <p>Slowed down gif for a frame-by-frame compilation of still images of the Miata</p>
-        </div>
-        <div class="img-text">
-            <img src="dolly_2.gif" />
-            <p>The sped up gif starts to demonstrate effects of the dolly zoom with the Miata in focus. Very cool!</p>
-         </div>
-    </div>
-
-    <h3>Prokudin-Gorskii Collection Self Selected Images</h3>
-    <p>Below is the Dolly Zoom gif of a Mazda Miata car. I started with a 0.5x zoomed out close-up shot of the car. Then, I walked backwards while simultaneously zooming in on my Samsung S21+ phone. I tried
-        to keep the Miata a consistent size in the scene. We can see a slight dolly effect when the gif is played at a fast speed with the trees and sky in the background becoming stretched and warped. After watching
-        my gif a few times, I almost felt like I had vertigo!
-        </p>  
-    <div id="dollies" class="img-row">
-        <div class="img-text">
-            <img src="dolly_1.gif" />
-            <p>Slowed down gif for a frame-by-frame compilation of still images of the Miata</p>
-        </div>
-        <div class="img-text">
-            <img src="dolly_2.gif" />
-            <p>The sped up gif starts to demonstrate effects of the dolly zoom with the Miata in focus. Very cool!</p>
-         </div>
-    </div>
-
-    <h2>Bells & Whistles: Implementation Details</h2>
     <h3>Automatic Cropping</h3>
-    <h3>Automatic Contrast</h3>
-    <h3>Automatic White Balance</h3>
-    <h3>Better Color Mapping</h3>
-    <h3>Better Features</h3>
+    <p>
+      I detect near-black borders per side and crop symmetrically based on the strongest detection, then adjust by (dx, dy).
+      Some cases remain imperfect (e.g., melons.tif).
+    </p>
+    <div class="img-row">
+      <figure class="img-text">
+        <img src="emir_pyramid.png" alt="">
+        <figcaption>Before crop for emir.tif.</figcaption>
+      </figure>
+      <figure class="img-text">
+        <img src="emircrop.png" alt="">
+        <figcaption>After crop for emir.tif.</figcaption>
+      </figure>
+    </div>
+    <div class="img-row">
+      <figure class="img-text">
+        <img src="melons_pyramid.png" alt="">
+        <figcaption>Before crop for melons.tif.</figcaption>
+      </figure>
+      <figure class="img-text">
+        <img src="melonscrop.png" alt="">
+        <figcaption>After crop for melons.tif. Left edge still tricky.</figcaption>
+      </figure>
+    </div>
 
-    <!-- Link back to main portfolio -->
-    <p><a href="../index.html">← Back to Portfolio</a></p>
+    <h3>Automatic Contrast</h3>
+    <p>
+      LAB-space CLAHE on L-channel, then convert back to RGB. Boosts local contrast while limiting over-amplification.
+    </p>
+    <div class="img-row">
+      <figure class="img-text">
+        <img src="emir_pyramid.png" alt="">
+        <figcaption>Before contrast (emir.tif).</figcaption>
+      </figure>
+      <figure class="img-text">
+        <img src="emircontrast.png" alt="">
+        <figcaption>After contrast (emir.tif).</figcaption>
+      </figure>
+    </div>
+
+    <h3>Automatic White Balance</h3>
+    <p>
+      Gray-world (with saturation threshold), learning-based (OpenCV), and a simple brightest-pixel method.
+    </p>
+    <div class="img-row">
+      <figure class="img-text">
+        <img src="siren_pyramid.png" alt="">
+        <figcaption>Before white balance (siren.tif).</figcaption>
+      </figure>
+      <figure class="img-text">
+        <img src="siren_pyramid_l2norm_final_False_contrast_no_color_no_wb.png" alt="">
+        <figcaption>After white balance: background/flowers look cleaner.</figcaption>
+      </figure>
+    </div>
+
+    <h3>Better Color Mapping</h3>
+    <p>
+      Post-RGB enhancements (HSV/LAB tweaks to saturation and balance) to achieve more realistic color without remapping
+      capture primaries.
+    </p>
+    <div class="img-row">
+      <figure class="img-text">
+        <img src="contrast.png" alt="">
+        <figcaption>Improved color vibrance (icon).</figcaption>
+      </figure>
+    </div>
+
+    <h3>Better Features</h3>
+    <p>
+      Gradient-based scores: compute Sobel gradient magnitudes and feed them to L2/NCC for edge-robust alignment.
+    </p>
+    <div class="img-row">
+      <figure class="img-text">
+        <img src="cathedral_pyramid.png" alt="">
+        <figcaption>NCC on raw pixels.</figcaption>
+      </figure>
+      <figure class="img-text">
+        <img src="cathedral_pyramid_ncc_gradient_final_False_no_contrast_no_color_no_wb.png" alt="">
+        <figcaption>NCC on gradient magnitudes.</figcaption>
+      </figure>
+    </div>
+
+    <h4>References</h4>
+    <ul class="refs">
+      <li>Canny &amp; cropping: GeeksforGeeks — Implement Canny in OpenCV</li>
+      <li>Contrast (LAB/CLAHE): StackOverflow thread on increasing contrast in OpenCV</li>
+      <li>Color spaces: PyImageSearch (cv2.cvtColor)</li>
+      <li>Auto color correction: PyImageSearch</li>
+      <li>White balance: OpenCV <code>xphoto::WhiteBalancer</code> reference</li>
+    </ul>
+
+    <p class="back-link"><a href="../index.html">← Back to Portfolio</a></p>
+  </main>
 </body>
 </html>

@@ -1,0 +1,133 @@
+body {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.img-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;        
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.architectural {
+    margin-bottom: 10px;
+}
+
+.img-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   
+    align-items: center;
+    max-width: 420px;
+}
+
+.img-text img { 
+  width: 100%; 
+  height: auto; 
+  display: block;
+}
+
+.img-text p {
+    text-align: center;
+    width: 90%;
+}
+
+h2 {
+    margin-top: 40px;
+}
+
+#cropme {
+    overflow: hidden;
+    position: relative;
+    top: -40px;
+}
+
+#cropme img {
+    position: relative;
+    top: 40px;
+}
+
+#cropme2 {
+    position: relative;
+    top: -40px;
+}
+
+#dollies .img-text img {
+    width: 480px;
+    height: auto;
+}
+
+/* 3-column grid with gap */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* Center captions and keep images neat */
+.gallery .img-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery img {
+  width: 100%;
+  aspect-ratio: 1 / 1;   /* makes width = height */
+  object-fit: contain;   /* scales whole image inside the square */
+  background: #f8f8f8;   /* optional: fill background so empty space looks nice */
+  border-radius: 8px;
+}
+
+/* ✨ Center a last row of 2 across 3 columns */
+.gallery > *:nth-last-child(2) {
+  grid-column: 2;
+}
+
+.gallery > *:last-child {
+  grid-column: 3;
+}
+/* Responsive: 2 cols on tablets, 1 on phones */
+@media (max-width: 900px) {
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  /* If last row has 1 item in 2-col mode, center it */
+  .gallery > *:last-child:nth-child(2n + 1) { grid-column: 1 / -1; justify-self: center; max-width: 520px; }
+}
+
+@media (max-width: 560px) {
+  .gallery { grid-template-columns: 1fr; }
+  .gallery img { height: auto; } /* let it grow naturally on small screens */
+}
+
+.disp-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.disp-table th, .disp-table td {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.disp-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.disp-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
